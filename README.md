@@ -1,88 +1,87 @@
-# Laboratorio 04: Pruebas Unitarias con Jest en React
+# Lab 04 - Testing con Jest 🧪
 
-Este laboratorio tiene como objetivo proporcionar una introducción práctica a las pruebas unitarias en aplicaciones React utilizando Jest y React Testing Library.
+Este repositorio contiene las pruebas unitarias desarrolladas con **Jest y Testing Library** para el proyecto **RoomieYA**, como parte del curso **Ingeniería de Software II (2025-1)**.
 
-## Aplicación Todo List
+## 👤 Autor
 
-La aplicación desarrollada es una lista de tareas (Todo List) con las siguientes funcionalidades:
+- Jefferson Ricardo De La Cruz Villa
 
-- Añadir nuevas tareas
-- Marcar tareas como completadas
-- Eliminar tareas
-- Filtrar tareas por estado (todas, activas, completadas)
-- Ver estadísticas de tareas
-- Borrar todas las tareas completadas
+---
 
-## Estructura del Proyecto
+## 📌 Historia de Usuario (Sprint 2)
 
-```
-app/
-├── components/
-│   ├── Todo.tsx               # Componente principal que integra todos los demás
-│   ├── TodoForm.tsx           # Formulario para añadir nuevas tareas
-│   ├── TodoItem.tsx           # Componente individual para cada tarea
-│   ├── TodoList.tsx           # Lista de tareas
-│   ├── TodoFilter.tsx         # Filtros para las tareas
-│   ├── TodoStats.tsx          # Estadísticas de tareas
-│   └── __tests__/             # Directorio de pruebas
-│       ├── TodoItem.test.tsx  # Pruebas para TodoItem
-│       ├── TodoForm.test.tsx  # Pruebas para TodoForm
-│       └── TodoList.test.tsx  # Pruebas para TodoList
-├── page.tsx                   # Página principal
-└── layout.tsx                 # Layout de la aplicación
-```
+**HU:** Como usuario del sistema, quiero enviar solicitudes de mantenimiento para reportar problemas en el alojamiento y recibir alertas sobre el estado de dichas solicitudes.
 
-## Instrucciones del Laboratorio
+### ✅ Tareas completadas
 
-En este laboratorio, exploraremos cómo escribir pruebas unitarias efectivas siguiendo el patrón **Prepare, Execute and Validate**:
+| ID_TAREA | Tarea                         | Rol       | Descripción técnica |
+|----------|-------------------------------|-----------|---------------------|
+| TA001    | Diseñar formulario de solicitud | Frontend  | Crear formulario para que los usuarios ingresen detalles del mantenimiento. |
+| TA002    | Crear API para enviar solicitud | Backend   | Programar endpoint para registrar solicitudes de mantenimiento. |
 
-1. **Prepare**: Configurar el entorno de prueba y los datos necesarios
-2. **Execute**: Realizar la acción que queremos probar
-3. **Validate**: Verificar que el resultado es el esperado
+---
 
-### Ejercicios
+## ✅ Escenarios de prueba – HU: Enviar solicitud de mantenimiento
 
-#### Ejercicio 1: Completar prueba de TodoItem
+### 🟢 Happy Paths
 
-Completa el test para verificar que el componente `TodoItem` muestra correctamente el texto de una tarea con caracteres especiales.
+**Se visualiza correctamente el formulario de solicitud**  
+- **Precondición**: El usuario ha iniciado sesión correctamente.  
+- **Acción**: Navega a la sección de “Mantenimiento” y accede al botón "Enviar solicitud".  
+- **Resultado esperado**: Se muestra un formulario con campos: descripción, tipo de problema y botón de envío.
 
-Archivo: `app/components/__tests__/TodoItem.test.tsx`
+**Se permite escribir en el campo de descripción**  
+- **Acción**: El usuario escribe una descripción válida (por ejemplo: "fuga de agua en el baño").  
+- **Resultado esperado**: El valor escrito aparece en pantalla y es editable.
 
-#### Ejercicio 2: Completar prueba de TodoForm
+**El botón de envío se habilita con datos válidos**  
+- **Acción**: Se completan todos los campos obligatorios del formulario.  
+- **Resultado esperado**: El botón "Enviar solicitud" se habilita correctamente.
 
-Completa el test para verificar que el componente `TodoForm` maneja correctamente la entrada de texto con espacios al inicio o final.
+**La solicitud se envía correctamente al backend**  
+- **Acción**: El usuario hace clic en "Enviar solicitud".  
+- **Resultado esperado**:  
+  - Se realiza una petición POST al endpoint `/api/solicitudes-mantenimiento`.  
+  - Se recibe una confirmación de éxito.  
+  - El formulario se limpia y se muestra un mensaje de éxito.
 
-Archivo: `app/components/__tests__/TodoForm.test.tsx`
+**El sistema responde con confirmación visual**  
+- **Acción**: Luego de enviar, se visualiza una alerta como: “Solicitud registrada correctamente”.  
+- **Resultado esperado**: El usuario tiene certeza de que su solicitud fue recibida.
 
-#### Ejercicio 3: Completar prueba de TodoList
+---
 
-Completa el test para verificar que el componente `TodoList` pasa correctamente las funciones onToggle y onDelete a cada TodoItem.
+### 🔴 Unhappy Paths
 
-Archivo: `app/components/__tests__/TodoList.test.tsx`
+**El usuario intenta enviar sin completar los campos**  
+- **Acción**: Hace clic en “Enviar solicitud” sin ingresar datos.  
+- **Resultado esperado**:  
+  - No se envía nada al backend.  
+  - Se muestran mensajes de error bajo los campos vacíos: “Este campo es obligatorio”.
 
-## Casos de Prueba
+**La descripción contiene solo espacios**  
+- **Acción**: El usuario escribe `"   "` como descripción.  
+- **Resultado esperado**:  
+  - El botón permanece deshabilitado o se bloquea el envío.  
+  - Se muestra mensaje de validación: “Ingrese una descripción válida”.
 
-En las pruebas existentes, podrás encontrar ejemplos de:
+**El servidor falla al recibir la solicitud**  
+- **Simulación**: El backend responde con un error 500.  
+- **Resultado esperado**:  
+  - Se muestra mensaje de error: “No se pudo enviar la solicitud. Intente más tarde”.  
+  - El formulario no se borra.
 
-- **Happy Path**: Pruebas que verifican el comportamiento correcto cuando todo funciona como se espera
-- **Unhappy Path**: Pruebas que verifican el comportamiento cuando hay situaciones inesperadas o errores
+**Error de conexión con el servidor**  
+- **Simulación**: Se desconecta el backend o el usuario pierde conexión.  
+- **Resultado esperado**:  
+  - Se captura el error.  
+  - Se muestra mensaje: “Error de red. Verifique su conexión”.
 
-## Ejecución de Pruebas
+---
 
-Para ejecutar las pruebas, utiliza el siguiente comando:
+## 🧪 Cómo ejecutar las pruebas
 
-```bash
-npm test
-```
-
-Para ejecutar las pruebas en modo observador (útil durante el desarrollo):
-
-```bash
-npm run test:watch
-```
-
-## Recursos Adicionales
-
-- [Jest Documentation](https://jestjs.io/docs/getting-started)
-- [React Testing Library Documentation](https://testing-library.com/docs/react-testing-library/intro/)
-- [Jest DOM Testing Library](https://github.com/testing-library/jest-dom)
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/Jefferson062615/lab-04-test-frontend.git
+   cd lab-04-test-frontend
